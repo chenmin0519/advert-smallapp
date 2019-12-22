@@ -1,0 +1,71 @@
+spring:
+  profiles : dev
+  datasource:
+    name: basic
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://cdb-a6qng4qq.cd.tencentcdb.com:10022/avert_smallapp?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+    username: root
+    password: Yizhi@2019
+    driver-class-name: com.mysql.jdbc.Driver
+    minIdle: 3
+    maxActive: 50
+    initialSize: 10
+    timeBetweenEvictionRunsMillis: 3000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: select 1
+    testWhileIdle: true
+    testOnBorrow: true
+    testOnReturn: true
+  jackson:
+    default-property-inclusion: non_null
+    joda-date-time-format: yyyy-MM-dd HH:mm:ss
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+logging:
+  level:
+    tk.mybatis: TRACE
+    com.advert: TRACE
+    io.swagger.models.parameters: error
+
+server:
+  port: 8031
+  undertow:
+    io-threads: 4
+    worker-threads: 16
+
+mybatis:
+  type-aliases-package: com.advert.smallapp.pojo
+  #驼峰
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mysql/*.xml
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+mapper:
+  mappers:
+    - com.advert.smallapp.mapper.CommonMapper
+  not-empty: false
+  identity: MYSQL
+
+wechat:
+  mini:
+    default-appid: wx5ab86e4384eecfdd
+    apps:
+      wx5ab86e4384eecfdd:
+        appid: wx5ab86e4384eecfdd
+        secret: e276d385be00b58203f812390ddc3133
+#
+#
+#logging:
+#  level:
+#    root: info
+#    com.advert: trace
+#    io.swagger.models.parameters: error
+#  file:
+#    max-history: 7
+#logging.file: /home/apps/logs/${spring.application.name}.log
