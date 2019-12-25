@@ -10,6 +10,7 @@ spring:
         max-active: 100
         max-idle: 100
         min-idle: 0
+        max-wait: -1
 
   datasource:
     name: basic
