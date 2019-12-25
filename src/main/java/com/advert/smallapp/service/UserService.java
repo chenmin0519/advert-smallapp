@@ -10,6 +10,8 @@ public interface UserService {
 
     User regist(User user) throws Exception;
 
+    String appAuthor(String openid) throws Exception;
+
     /**
      * 小程序授权接口
      * @return

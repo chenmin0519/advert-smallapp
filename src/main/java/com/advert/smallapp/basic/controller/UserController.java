@@ -24,12 +24,23 @@ public class UserController {
     @Autowired
     private WechatMiniClient wechatMiniClient;
 
-    @GetMapping(value = "/test")
-    @ApiOperation("测试")
-    public ApiResult<String> testAddQueue(String code) throws Exception {
+    @GetMapping(value = "/getoppenid")
+    @ApiOperation("获取小程序的oppenid等信息")
+    public ApiResult<WechatOpenidDTO> testAddQueue(String code) throws Exception {
         WechatOpenidDTO wod = wechatMiniClient.jscode2session(code,"wx5ab86e4384eecfdd");
-        User user = userService.smallAppOauth(wod);
-        return ApiResult.success(JSONObject.toJSONString(wod));
+        return ApiResult.success(wod);
+    }
+
+    @PostMapping(value = "/appauthor")
+    @ApiOperation("校验用户是否注册过")
+    public ApiResult appAuthor(String openid) {
+        String result = "";
+        try{
+            String token = userService.appAuthor(openid);
+            return ApiResult.success(token);
+        }catch (Exception e){
+            return ApiResult.error(e.getMessage());
+        }
     }
 
     @PostMapping(value = "/regist")

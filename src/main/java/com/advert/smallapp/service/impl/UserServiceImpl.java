@@ -4,6 +4,7 @@ import com.advert.smallapp.mapper.UserMapper;
 import com.advert.smallapp.pojo.User;
 import com.advert.smallapp.service.UserService;
 import com.advert.smallapp.tdo.WechatOpenidDTO;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,22 @@ public class UserServiceImpl implements UserService {
         user.setPassword(Base64.getEncoder().encodeToString(user.getPassword().getBytes()));
         userMapper.insertSelective(user);
         return user;
+    }
+
+    @Override
+    public String appAuthor(String openid) throws Exception {
+        User user = new User();
+        user.setWxOpenid(openid);
+        User result = userMapper.selectOne(user);
+        if(result == null){
+           throw new Exception("未注册");
+        } else {
+            user.setUsername(result.getUsername());
+            user.setPhone(result.getPhone());
+            String str = JSONObject.toJSONString(user);
+            str = Base64.getEncoder().encodeToString(str.getBytes());
+            return str;
+        }
     }
 
     @Override
