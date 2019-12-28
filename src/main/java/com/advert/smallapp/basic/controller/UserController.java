@@ -1,6 +1,8 @@
 package com.advert.smallapp.basic.controller;
 
 import com.advert.smallapp.commons.ApiResult;
+import com.advert.smallapp.exception.AppException;
+import com.advert.smallapp.exception.ExceptionUtil;
 import com.advert.smallapp.pojo.User;
 import com.advert.smallapp.service.UserService;
 import com.advert.smallapp.tdo.WechatOpenidDTO;
@@ -8,6 +10,7 @@ import com.advert.smallapp.utils.WechatMiniClient;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +37,6 @@ public class UserController {
     @PostMapping(value = "/appauthor")
     @ApiOperation("校验用户是否注册过")
     public ApiResult appAuthor(String openid) {
-        String result = "";
         try{
             String token = userService.appAuthor(openid);
             return ApiResult.success(token);
@@ -46,8 +48,18 @@ public class UserController {
     @PostMapping(value = "/regist")
     @ApiOperation("测试")
     public ApiResult<User> regist(User user) throws Exception {
-//        String token = null;
         return ApiResult.success(userService.regist(user));
     }
 
+
+    @PostMapping(value = "/test")
+    @ApiOperation("测试")
+    public ApiResult<User> test(Integer i) throws Exception {
+//        String token = null;
+        if(i != 0){
+            throw ExceptionUtil.throwException(ExceptionUtil.NOT_FOUND,"傻逼异常");
+        }
+        int s =100/i;
+        return ApiResult.success(null);
+    }
 }

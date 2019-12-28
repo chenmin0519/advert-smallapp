@@ -1,5 +1,7 @@
 package com.advert.smallapp.service.impl;
 
+import com.advert.smallapp.exception.AppException;
+import com.advert.smallapp.exception.ExceptionUtil;
 import com.advert.smallapp.mapper.UserMapper;
 import com.advert.smallapp.pojo.User;
 import com.advert.smallapp.service.UserService;
@@ -37,7 +39,7 @@ public class UserServiceImpl implements UserService {
         user.setWxOpenid(openid);
         User result = userMapper.selectOne(user);
         if(result == null){
-           throw new Exception("未注册");
+            throw ExceptionUtil.throwException(ExceptionUtil.UN_REGIST,"用户未注册");
         } else {
             user.setUsername(result.getUsername());
             user.setPhone(result.getPhone());
