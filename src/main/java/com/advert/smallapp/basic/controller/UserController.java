@@ -1,6 +1,7 @@
 package com.advert.smallapp.basic.controller;
 
 import com.advert.smallapp.commons.ApiResult;
+import com.advert.smallapp.config.TokenCheck;
 import com.advert.smallapp.exception.AppException;
 import com.advert.smallapp.exception.ExceptionUtil;
 import com.advert.smallapp.pojo.User;
@@ -14,6 +15,12 @@ import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 
 @RestController
@@ -34,32 +41,32 @@ public class UserController {
         return ApiResult.success(wod);
     }
 
-    @PostMapping(value = "/appauthor")
+    @GetMapping(value = "/appauthor")
     @ApiOperation("校验用户是否注册过")
-    public ApiResult appAuthor(String openid) {
-        try{
-            String token = userService.appAuthor(openid);
-            return ApiResult.success(token);
-        }catch (Exception e){
-            return ApiResult.error(e.getMessage());
-        }
+    public ApiResult<String> appAuthor(String openid) throws Exception {
+        String oppenid = userService.appAuthor(openid);
+        return ApiResult.success(oppenid);
     }
 
     @PostMapping(value = "/regist")
-    @ApiOperation("测试")
-    public ApiResult<User> regist(User user) throws Exception {
+    @ApiOperation("注册")
+    public ApiResult<String> regist(User user) throws Exception {
         return ApiResult.success(userService.regist(user));
     }
 
-
-    @PostMapping(value = "/test")
-    @ApiOperation("测试")
-    public ApiResult<User> test(Integer i) throws Exception {
-//        String token = null;
-        if(i != 0){
-            throw ExceptionUtil.throwException(ExceptionUtil.NOT_FOUND,"傻逼异常");
-        }
-        int s =100/i;
+    @GetMapping(value = "/testtoken")
+    @ApiOperation("c测试")
+    @TokenCheck
+    public ApiResult<String> test(String token){
         return ApiResult.success(null);
+    }
+    public static void main(String[] args) {
+        LocalTime now = LocalTime.now();
+        System.out.println(now);
+        now = now.plusSeconds(3);
+        System.out.println(now);
+        String str = now.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        System.out.println(str);
+        System.out.println(LocalTime.parse(str,DateTimeFormatter.ofPattern("HH:mm:ss")));
     }
 }

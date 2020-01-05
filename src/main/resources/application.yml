@@ -15,7 +15,7 @@ spring:
   datasource:
     name: basic
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://cdb-a6qng4qq.cd.tencentcdb.com:10022/avert_smallapp?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+    url: jdbc:mysql://cdb-a6qng4qq.cd.tencentcdb.com:10022/advert_smallapp?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
     username: root
     password: Yizhi@2019
     driver-class-name: com.mysql.jdbc.Driver

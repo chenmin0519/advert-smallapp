@@ -21,6 +21,7 @@ public class AdvertExceptionHandler {
         if(e instanceof AppException){
             return ApiResult.error(((AppException) e).getCode(),e.getMessage());
         }
+        e.printStackTrace();
         //未知异常
         return ApiResult.error(600L,"系统异常");
     }
