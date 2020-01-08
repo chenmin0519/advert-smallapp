@@ -21,6 +21,7 @@ public class WheelPlanting {
     private String title;
     @ApiModelProperty("导航点击链接地址")
     private String url;
-
+    @ApiModelProperty("类型")
+    private String type;
 
 }
