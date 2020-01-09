@@ -21,14 +21,14 @@ public class WheelPlantingController {
     private WheelPlantingService wheelPlantingService;
 
     @GetMapping(value = "/navigation")
-    @ApiOperation("查询轮播图")
+    @ApiOperation("查询导航图")
     public ApiResult<List<WheelPlanting>> quueryNavigation(){
         List<WheelPlanting> result = wheelPlantingService.queryNavigation();
         return ApiResult.success(result);
     }
 
     @PostMapping(value = "/saveImages")
-    @ApiOperation("查询轮播图")
+    @ApiOperation("保存系统用图")
     public ApiResult<Boolean> saveImages(@RequestBody WheelPlanting param){
         wheelPlantingService.saveImages(param);
         return ApiResult.success(true);

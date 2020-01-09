@@ -15,6 +15,7 @@ public class WheelPlantingServiceImpl implements WheelPlantingService {
     @Autowired
     private WheelPlantingMapper wheelPlantingMapper;
 
+
     @Override
     public List<WheelPlanting> queryNavigation() {
         WheelPlanting query = new WheelPlanting();
