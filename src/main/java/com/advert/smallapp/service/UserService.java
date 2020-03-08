@@ -12,4 +12,5 @@ public interface UserService {
 
     String appAuthor(String openid) throws Exception;
 
+    String checkPhone(String phone) throws Exception;
 }

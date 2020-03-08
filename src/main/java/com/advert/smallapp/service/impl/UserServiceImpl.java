@@ -37,7 +37,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public String regist(User user) throws Exception {
         validataUserInfo(user);
-        user.setPassword(Base64.getEncoder().encodeToString(user.getPassword().getBytes()));
+        if(user.getPassword() != null){
+            user.setPassword(Base64.getEncoder().encodeToString(user.getPassword().getBytes()));
+        }
         userMapper.insertSelective(user);
         return aouthToken(user);
     }
@@ -53,6 +55,17 @@ public class UserServiceImpl implements UserService {
         if(StringUtils.isBlank(user.getPhone())){
             ExceptionUtil.throwException(ExceptionUtil.UN_REGIST,"用户手机号不能为空");
         }
+    }
+
+    @Override
+    public String checkPhone(String phone) throws Exception {
+        User user = new User();
+        user.setPhone(phone);
+        User result = userMapper.selectOne(user);
+        if(result != null){
+            return "1";
+        }
+        return "0";
     }
 
     @Override
