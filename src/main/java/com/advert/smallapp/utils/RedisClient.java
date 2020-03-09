@@ -31,6 +31,14 @@ public class RedisClient {
         redisTemplate.opsForValue().set(key, value);
     }
     /**
+     * 设置指定 key 的值超时秒
+     * @param key
+     * @param value
+     */
+    public void setTime(String key, String value,Long time) {
+        redisTemplate.opsForValue().set(key, value,time,TimeUnit.SECONDS);
+    }
+    /**
      * 设置指定 key 的值
      * @param key
      * @param value

@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
             ExceptionUtil.throwException(ExceptionUtil.UN_REGIST,"用户未注册");
         } else {
             key = Base64.getEncoder().encodeToString(user.getPhone().getBytes());
-            redisClient.set(Constans.USER_TOKEN_KEY+key,SysUtils.getToken(user));
+            redisClient.setTime(Constans.USER_TOKEN_KEY+key,SysUtils.getToken(user),Constans.USER_TOKEN_TIME_OUT);
         }
         return key;
     }
