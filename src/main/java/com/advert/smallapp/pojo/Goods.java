@@ -41,4 +41,20 @@ public class Goods extends MainPO {
     @ApiModelProperty("人流量/区位价值")
     @Column(name = "traffic_was")
     private Integer trafficWas;
+
+    @ApiModelProperty("标题")
+    @Column(name = "title")
+    private String title;
+
+    @ApiModelProperty("封面")
+    @Column(name = "icon")
+    private String icon;
+
+    @ApiModelProperty("是否推荐 1：是 2否")
+    @Column(name = "is_recommend")
+    private String isRecommend;
+
+    @ApiModelProperty("是否热门 1：是 2否")
+    @Column(name = "is_hot")
+    private String is_hot;
 }

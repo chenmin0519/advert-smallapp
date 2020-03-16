@@ -44,7 +44,14 @@ server:
   undertow:
     io-threads: 4
     worker-threads: 16
-
+oss:
+  accessKeyId: LTAI4Ftr4E1G3hT8jn7gqQAS
+  accessKeySecret: VA57Bca4u7IdiuFzdxj4VDB7h5NisR
+  bucketName: yizhifile
+  accessUrl: http://file.chenmin0519.club/
+  endpoint: oss-cn-hangzhou.aliyuncs.com
+  picLocation: yizhi
+  key: biaoqing #加密密钥
 mybatis:
   type-aliases-package: com.advert.smallapp.pojo
   #驼峰
@@ -70,6 +77,7 @@ wechat:
       wx5ab86e4384eecfdd:
         appid: wx5ab86e4384eecfdd
         secret: e276d385be00b58203f812390ddc3133
+
 #
 #
 #logging:
