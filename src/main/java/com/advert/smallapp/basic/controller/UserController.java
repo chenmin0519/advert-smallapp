@@ -52,7 +52,6 @@ public class UserController {
         return ApiResult.success(rd_session);
     }
 
-
     @GetMapping(value = "/getoppenid")
     @ApiOperation("获取小程序的oppenid等信息")
     public ApiResult<WechatOpenidDTO> testAddQueue(@RequestParam("code") @ApiParam("请求openid必须") String code) throws Exception {
