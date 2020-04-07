@@ -22,6 +22,10 @@ public class Goods extends MainPO {
     @Column(name = "address")
     private String address;
 
+    @ApiModelProperty("月租")
+    @Column(name = "amount")
+    private String amount;
+
     @ApiModelProperty("广告位面积:平方厘米")
     @Column(name = "area")
     private Integer area;
@@ -33,10 +37,6 @@ public class Goods extends MainPO {
     @ApiModelProperty("广告位规格")
     @Column(name = "spec")
     private String spec;
-
-    @ApiModelProperty("时间段")
-    @Column(name = "time_period")
-    private LocalDateTime timePeriod;
 
     @ApiModelProperty("人流量/区位价值")
     @Column(name = "traffic_was")
