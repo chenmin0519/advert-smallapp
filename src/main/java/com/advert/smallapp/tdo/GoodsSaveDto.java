@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Column;
+import java.util.List;
 
 @Data
 public class GoodsSaveDto extends Goods {
@@ -27,5 +28,5 @@ public class GoodsSaveDto extends Goods {
 
     @ApiModelProperty("图片")
     @Column(name = "images")
-    private Integer images;
+    private List<String> images;
 }
