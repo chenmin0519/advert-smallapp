@@ -19,7 +19,7 @@ public class Contact extends MainPO {
 
     @ApiModelProperty("联系人姓名")
     @Column(name = "name")
-    private String contactName;
+    private String name;
 
     @ApiModelProperty("联系人性别")
     @Column(name = "sex")
@@ -31,5 +31,5 @@ public class Contact extends MainPO {
 
     @ApiModelProperty("联系人电话号码")
     @Column(name = "number")
-    private Integer number;
+    private String number;
 }

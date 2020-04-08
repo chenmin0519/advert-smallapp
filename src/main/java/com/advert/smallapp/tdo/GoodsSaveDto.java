@@ -24,9 +24,13 @@ public class GoodsSaveDto extends Goods {
 
     @ApiModelProperty("联系人电话号码")
     @Column(name = "number")
-    private Integer number;
+    private String number;
 
     @ApiModelProperty("图片")
     @Column(name = "images")
     private List<String> images;
+
+    @ApiModelProperty("信息")
+    @Column(name = "content")
+    private String content;
 }

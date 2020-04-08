@@ -24,11 +24,11 @@ public class Goods extends MainPO {
 
     @ApiModelProperty("月租")
     @Column(name = "amount")
-    private String amount;
+    private Long amount;
 
     @ApiModelProperty("广告位面积:平方厘米")
     @Column(name = "area")
-    private Integer area;
+    private Long area;
 
     @ApiModelProperty("广告位类型")
     @Column(name = "category")
@@ -40,7 +40,7 @@ public class Goods extends MainPO {
 
     @ApiModelProperty("人流量/区位价值")
     @Column(name = "traffic_was")
-    private Integer trafficWas;
+    private Long trafficWas;
 
     @ApiModelProperty("标题")
     @Column(name = "title")
@@ -66,4 +66,7 @@ public class Goods extends MainPO {
     @Column(name = "area_code")
     private String areaCode;
 
+    @ApiModelProperty("联系人id")
+    @Column(name = "contact_id")
+    private Long contactId;
 }
