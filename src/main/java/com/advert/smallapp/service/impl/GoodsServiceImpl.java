@@ -15,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import springfox.documentation.spring.web.json.Json;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,14 +46,14 @@ public class GoodsServiceImpl implements GoodsService {
         BeanUtils.copyProperties(saveDto,goods);
         goods.setContactId(contact.getId());
         goodsMapper.insertSelective(goods);
-        String imagePaths = imagesImport(goods.getId(),saveDto.getImages());
+//        String imagePaths = imagesImport(goods.getId(),saveDto.getImages());
         GoodsDetail goodsDetail = new GoodsDetail();
-        goodsDetail.setImages(imagePaths);
+        goodsDetail.setImages(JSONObject.toJSONString(saveDto.getImages()));
         goodsDetail.setContent(saveDto.getContent());
         goodsDetail.setGoodsId(goods.getId());
         goodsDetailMapper.insertSelective(goodsDetail);
-        List<String> images = JSONObject.parseObject(imagePaths,ArrayList.class);
-        goods.setIcon(images.get(0));
+//        List<String> images = JSONObject.parseObject(imagePaths,ArrayList.class);
+        goods.setIcon(saveDto.getImages().get(0));
         goodsMapper.updateByPrimaryKeySelective(goods);
     }
 

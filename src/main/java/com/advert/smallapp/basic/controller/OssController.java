@@ -32,6 +32,7 @@ public class OssController {
         return ApiResult.success(url);
     }
 
+
     @GetMapping(value = "/geUrl")
     @ApiOperation("获取url")
     public ApiResult<String> geUrl(@RequestParam("file") @ApiParam("请求openid必须") String key) throws Exception {
