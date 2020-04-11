@@ -3,16 +3,25 @@ package com.advert.smallapp.basic.controller;
 import com.advert.smallapp.commons.ApiResult;
 import com.advert.smallapp.tdo.WechatOpenidDTO;
 import com.advert.smallapp.utils.OSSClientUtils;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +30,9 @@ import java.util.Map;
 @RequestMapping("/oss")
 @Slf4j
 public class OssController {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private OSSClientUtils ossClient;
 
@@ -32,6 +44,15 @@ public class OssController {
         return ApiResult.success(url);
     }
 
+    @PostMapping(value = "/uploadImage")
+    @ApiOperation("上传图片")
+    public ApiResult<String> uploadImage(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        MultipartHttpServletRequest req =(MultipartHttpServletRequest)request;
+        MultipartFile multipartFile = req.getFile("img");
+        String url = ossClient.uploadFile(multipartFile.getInputStream(),"/images/goods",multipartFile.getOriginalFilename());
+        logger.info(url);
+        return ApiResult.success(url);
+    }
 
     @GetMapping(value = "/geUrl")
     @ApiOperation("获取url")

@@ -1,5 +1,6 @@
 package com.advert.smallapp.service.impl;
 
+import com.advert.smallapp.commons.PageQuery;
 import com.advert.smallapp.mapper.ContactMapper;
 import com.advert.smallapp.mapper.GoodsDetailMapper;
 import com.advert.smallapp.mapper.GoodsMapper;
@@ -9,8 +10,11 @@ import com.advert.smallapp.pojo.GoodsDetail;
 import com.advert.smallapp.service.GoodsService;
 import com.advert.smallapp.tdo.GoodsSaveDto;
 import com.advert.smallapp.utils.OSSClientUtils;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyun.oss.OSSClient;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +40,12 @@ public class GoodsServiceImpl implements GoodsService {
     private GoodsDetailMapper goodsDetailMapper;
 
     @Override
+    public PageInfo<Goods> loadPage(PageQuery<Goods> query) {
+        return PageHelper.startPage(query.getPageNum(), query.getPageSize()).doSelectPageInfo(
+                () -> goodsMapper.select(query.getQueryPo()));
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public void save(GoodsSaveDto saveDto) {
         Contact contact = new Contact();
@@ -48,12 +58,12 @@ public class GoodsServiceImpl implements GoodsService {
         goodsMapper.insertSelective(goods);
 //        String imagePaths = imagesImport(goods.getId(),saveDto.getImages());
         GoodsDetail goodsDetail = new GoodsDetail();
-        goodsDetail.setImages(JSONObject.toJSONString(saveDto.getImages()));
+        goodsDetail.setImages(saveDto.getImages());
         goodsDetail.setContent(saveDto.getContent());
         goodsDetail.setGoodsId(goods.getId());
         goodsDetailMapper.insertSelective(goodsDetail);
-//        List<String> images = JSONObject.parseObject(imagePaths,ArrayList.class);
-        goods.setIcon(saveDto.getImages().get(0));
+        List<String> images = JSONObject.parseObject(saveDto.getImages(),ArrayList.class);
+        goods.setIcon(images.get(0));
         goodsMapper.updateByPrimaryKeySelective(goods);
     }
 
@@ -72,4 +82,5 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return JSONObject.toJSONString(paths);
     }
+
 }

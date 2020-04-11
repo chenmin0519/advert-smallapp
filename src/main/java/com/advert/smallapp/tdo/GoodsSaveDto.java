@@ -28,7 +28,7 @@ public class GoodsSaveDto extends Goods {
 
     @ApiModelProperty("图片")
     @Column(name = "images")
-    private List<String> images;
+    private String images;
 
     @ApiModelProperty("信息")
     @Column(name = "content")

@@ -1,10 +1,12 @@
 package com.advert.smallapp.basic.controller;
 
 import com.advert.smallapp.commons.ApiResult;
+import com.advert.smallapp.commons.PageQuery;
+import com.advert.smallapp.pojo.Goods;
 import com.advert.smallapp.service.GoodsService;
-import com.advert.smallapp.tdo.AreaAll;
 import com.advert.smallapp.tdo.GoodsSaveDto;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
@@ -29,5 +31,9 @@ public class GoodsController {
         goodsService.save(saveDto);
         return ApiResult.success(true);
     }
-
+    @GetMapping(value = "/loadPage")
+    @ApiOperation("保存")
+    public PageInfo<Goods> loadPage(PageQuery<Goods> query){
+        return goodsService.loadPage(query);
+    }
 }
