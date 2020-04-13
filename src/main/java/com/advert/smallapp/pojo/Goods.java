@@ -32,7 +32,7 @@ public class Goods extends MainPO {
 
     @ApiModelProperty("广告位类型")
     @Column(name = "category")
-    private String category;
+    private Integer category;
 
     @ApiModelProperty("广告位规格")
     @Column(name = "spec")

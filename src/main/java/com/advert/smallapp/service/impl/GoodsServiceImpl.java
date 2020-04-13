@@ -1,6 +1,7 @@
 package com.advert.smallapp.service.impl;
 
 import com.advert.smallapp.commons.PageQuery;
+import com.advert.smallapp.enums.TypeEnum;
 import com.advert.smallapp.mapper.ContactMapper;
 import com.advert.smallapp.mapper.GoodsDetailMapper;
 import com.advert.smallapp.mapper.GoodsMapper;
@@ -9,6 +10,7 @@ import com.advert.smallapp.pojo.Goods;
 import com.advert.smallapp.pojo.GoodsDetail;
 import com.advert.smallapp.service.GoodsService;
 import com.advert.smallapp.tdo.GoodsSaveDto;
+import com.advert.smallapp.tdo.GoodsVo;
 import com.advert.smallapp.utils.OSSClientUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -43,6 +45,24 @@ public class GoodsServiceImpl implements GoodsService {
     public PageInfo<Goods> loadPage(PageQuery<Goods> query) {
         return PageHelper.startPage(query.getPageNum(), query.getPageSize()).doSelectPageInfo(
                 () -> goodsMapper.select(query.getQueryPo()));
+    }
+
+    @Override
+    public GoodsVo loadById(Long id) {
+        GoodsVo result = new GoodsVo();
+        Goods goods = goodsMapper.selectByPrimaryKey(id);
+        BeanUtils.copyProperties(goods,result);
+        GoodsDetail goodsDetail = new GoodsDetail();
+        goodsDetail.setGoodsId(goods.getId());
+        goodsDetail = goodsDetailMapper.selectOne(goodsDetail);
+        result.setContent(goodsDetail.getContent());
+        result.setImages(goodsDetail.getImages());
+        Contact contact = new Contact();
+        contact = contactMapper.selectByPrimaryKey(goods.getContactId());
+        result.setName(contact.getName());
+        result.setNumber(contact.getNumber());
+        result.setTypeName(TypeEnum.getByCode(goods.getCategory()).getValue());
+        return result;
     }
 
     @Override

@@ -17,4 +17,13 @@ public enum TypeEnum {
     public static String desc = "广告类型枚举";
     private Integer key;
     private String value;
+    public static TypeEnum getByCode(Integer key){
+        if(key == null)return null;
+        for(TypeEnum e : TypeEnum.values()){
+            if(e.key.equals(key)){
+                return e;
+            }
+        }
+        return null;
+    }
 }

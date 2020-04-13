@@ -4,7 +4,9 @@ import com.advert.smallapp.commons.ApiResult;
 import com.advert.smallapp.commons.PageQuery;
 import com.advert.smallapp.pojo.Goods;
 import com.advert.smallapp.service.GoodsService;
+import com.advert.smallapp.tdo.GoodsQuery;
 import com.advert.smallapp.tdo.GoodsSaveDto;
+import com.advert.smallapp.tdo.GoodsVo;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,8 +35,20 @@ public class GoodsController {
         return ApiResult.success(true);
     }
     @GetMapping(value = "/loadPage")
-    @ApiOperation("保存")
-    public PageInfo<Goods> loadPage(PageQuery<Goods> query){
-        return goodsService.loadPage(query);
+    @ApiOperation("分页查询")
+    public PageInfo<Goods> loadPage(@RequestBody PageQuery<GoodsQuery> query){
+        PageQuery<Goods> pageQuery = new PageQuery<>();
+        Goods goods = new Goods();
+        BeanUtils.copyProperties(query,pageQuery);
+        BeanUtils.copyProperties(query.getQueryPo(),goods);
+        pageQuery.setQueryPo(goods);
+        return goodsService.loadPage(pageQuery);
     }
+
+    @GetMapping(value = "/loadById")
+    @ApiOperation("分页查询")
+    public ApiResult<GoodsVo> loadById(@RequestParam("id") Long id){
+        return ApiResult.success(goodsService.loadById(id));
+    }
+
 }
