@@ -34,13 +34,15 @@ public class GoodsController {
         goodsService.save(saveDto);
         return ApiResult.success(true);
     }
-    @GetMapping(value = "/loadPage")
+    @PostMapping(value = "/loadPage")
     @ApiOperation("分页查询")
     public PageInfo<Goods> loadPage(@RequestBody PageQuery<GoodsQuery> query){
         PageQuery<Goods> pageQuery = new PageQuery<>();
         Goods goods = new Goods();
         BeanUtils.copyProperties(query,pageQuery);
-        BeanUtils.copyProperties(query.getQueryPo(),goods);
+        if(query.getQueryPo() != null) {
+            BeanUtils.copyProperties(query.getQueryPo(), goods);
+        }
         pageQuery.setQueryPo(goods);
         return goodsService.loadPage(pageQuery);
     }

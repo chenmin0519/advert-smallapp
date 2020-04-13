@@ -8,6 +8,7 @@ import com.advert.smallapp.exception.AppException;
 import com.advert.smallapp.exception.ExceptionUtil;
 import com.advert.smallapp.pojo.User;
 import com.advert.smallapp.service.UserService;
+import com.advert.smallapp.tdo.UserInfoTdo;
 import com.advert.smallapp.tdo.WechatOpenidDTO;
 import com.advert.smallapp.utils.WechatMiniClient;
 import com.alibaba.fastjson.JSONObject;
@@ -61,8 +62,8 @@ public class UserController {
 
     @GetMapping(value = "/appauthor")
     @ApiOperation("校验用户是否注册过")
-    public ApiResult<String> appAuthor(@RequestParam("openid") @ApiParam("openid小程序唯一值")String openid) throws Exception {
-        String key = userService.appAuthor(openid);
+    public ApiResult<UserInfoTdo> appAuthor(@RequestParam("openid") @ApiParam("openid小程序唯一值")String openid) throws Exception {
+        UserInfoTdo key = userService.appAuthor(openid);
         return ApiResult.success(key);
     }
 
@@ -103,5 +104,11 @@ public class UserController {
     public ApiResult<String> test(@RequestParam("token") @ApiParam("令牌")String token){
         return ApiResult.success(null);
     }
-
+    @GetMapping(value = "/getUserInfoByToken")
+    @ApiOperation("根据token获取用户信息")
+    @TokenCheck
+    public ApiResult<User> getUserInfoByToken(@RequestParam("token") @ApiParam("令牌")String token) {
+        User user = userService.getUserInfoByToken(token);
+        return ApiResult.success(null);
+    }
 }

@@ -36,7 +36,7 @@ public class RedisClient {
      * @param value
      */
     public void setTime(String key, String value,Long time) {
-        redisTemplate.opsForValue().set(key, value,time,TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key, value,time,TimeUnit.MINUTES);
     }
     /**
      * 设置指定 key 的值
