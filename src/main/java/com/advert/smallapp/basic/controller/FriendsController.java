@@ -77,7 +77,7 @@ public class FriendsController {
     public ApiResult<Boolean> saveComment(@RequestParam(name = "id") Long id,
                                    @RequestParam(name = "userId") Long userId,
                                    @RequestParam(name = "name") String name,
-                                   @RequestParam(name = "name") String content){
+                                   @RequestParam(name = "content") String content){
         FriendsDetail friendsDetail = new FriendsDetail();
         friendsDetail.setFriendsId(id);
         friendsDetail.setName(name);
