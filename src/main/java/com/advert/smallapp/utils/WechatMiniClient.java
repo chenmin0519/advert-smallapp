@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -18,13 +19,11 @@ import javax.annotation.PostConstruct;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.security.AlgorithmParameters;
 import java.security.Security;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Configuration
 @ConfigurationProperties("wechat.mini")
@@ -36,6 +35,9 @@ public class WechatMiniClient {
     private String defaultAppid;
 
     private Appinfo defaulApp;
+
+    @NotEmpty
+    private Map<String, Appinfo> apps;
 
     private static String api = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code" +
             "=%s&grant_type=authorization_code";
@@ -51,7 +53,7 @@ public class WechatMiniClient {
 
 
         //带参数请求微信授权
-        WechatOpenidDTO forObject = restTemplate.getForObject(String.format(api, "wx5ab86e4384eecfdd", "e276d385be00b58203f812390ddc3133", code),
+        WechatOpenidDTO forObject = restTemplate.getForObject(String.format(api, defaulApp.getAppid(), defaulApp.getSecret(), code),
                 WechatOpenidDTO.class);
 
         if (Objects.isNull(forObject.getErrcode()) ||
@@ -63,18 +65,26 @@ public class WechatMiniClient {
 
     @PostConstruct
     public void post() throws Exception {
+
+        apps.forEach((key, info) -> {
+            if (StringUtils.isBlank(info.getAppid())) {
+                info.setAppid(key);
+            }
+        });
+        //支持微信数据
+
         restTemplate.getMessageConverters().add(new WxMappingJackson2HttpMessageConverter());
 
-//        if (StringUtils.isNotBlank(defaultAppid)) {
-//            if (apps.containsKey(defaultAppid)) {
-//                defaulApp = apps.get(defaultAppid);
-//                log.info("配置默认appid为:" + defaulApp);
-//            } else {
-//                throw new Exception("apps not contain defaulAppid :" + defaultAppid);
-//            }
-//        } else {
-//            defaulApp = apps.entrySet().stream().findFirst().get().getValue();
-//        }
+        if (StringUtils.isNotBlank(defaultAppid)) {
+            if (apps.containsKey(defaultAppid)) {
+                defaulApp = apps.get(defaultAppid);
+                log.info("配置默认appid为:" + defaulApp);
+            } else {
+                throw new Exception("apps not contain defaulAppid :" + defaultAppid);
+            }
+        } else {
+            defaulApp = apps.entrySet().stream().findFirst().get().getValue();
+        }
 
     }
 

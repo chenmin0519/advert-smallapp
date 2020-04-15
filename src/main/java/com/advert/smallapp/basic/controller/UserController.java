@@ -76,7 +76,7 @@ public class UserController {
 
     @PostMapping(value = "/regist")
     @ApiOperation("小程序注册")
-    public ApiResult<String> regist(
+    public ApiResult<UserInfoTdo> regist(
             @RequestParam("userName") @ApiParam("用户名") String userName,
             @RequestParam("avatarUrl") @ApiParam("头像") String avatarUrl,
             @RequestParam("nickName") @ApiParam("昵称") String nickName,

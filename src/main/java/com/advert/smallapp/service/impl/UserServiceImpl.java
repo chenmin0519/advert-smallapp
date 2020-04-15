@@ -37,13 +37,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String regist(User user) throws Exception {
+    public UserInfoTdo regist(User user) throws Exception {
+        UserInfoTdo userInfoTdo = new UserInfoTdo();
         validataUserInfo(user);
         if(user.getPassword() != null){
             user.setPassword(Base64.getEncoder().encodeToString(user.getPassword().getBytes()));
         }
+        User query = new User();
+        query.setWxOpenid(user.getWxOpenid());
+        User result = userMapper.selectOne(query);
+        if(result != null){
+            BeanUtils.copyProperties(user,userInfoTdo);
+            userInfoTdo.setToken(aouthToken(result));
+            return userInfoTdo;
+        }
         userMapper.insertSelective(user);
-        return aouthToken(user);
+        BeanUtils.copyProperties(user,userInfoTdo);
+        userInfoTdo.setToken(aouthToken(user));
+        return userInfoTdo;
     }
 
     /**

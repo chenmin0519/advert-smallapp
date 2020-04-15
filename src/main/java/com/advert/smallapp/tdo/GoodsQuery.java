@@ -26,4 +26,6 @@ public class GoodsQuery {
     @ApiModelProperty("地区编码")
     @Column(name = "area_code")
     private String areaCode;
+
+    private String orderBy;
 }

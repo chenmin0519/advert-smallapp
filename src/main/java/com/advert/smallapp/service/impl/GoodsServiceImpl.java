@@ -9,6 +9,7 @@ import com.advert.smallapp.pojo.Contact;
 import com.advert.smallapp.pojo.Goods;
 import com.advert.smallapp.pojo.GoodsDetail;
 import com.advert.smallapp.service.GoodsService;
+import com.advert.smallapp.tdo.GoodsQuery;
 import com.advert.smallapp.tdo.GoodsSaveDto;
 import com.advert.smallapp.tdo.GoodsVo;
 import com.advert.smallapp.utils.OSSClientUtils;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springfox.documentation.spring.web.json.Json;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +44,15 @@ public class GoodsServiceImpl implements GoodsService {
     private GoodsDetailMapper goodsDetailMapper;
 
     @Override
-    public PageInfo<Goods> loadPage(PageQuery<Goods> query) {
+    public PageInfo<Goods> loadPage(PageQuery<GoodsQuery> query) {
+        if(query.getQueryPo()!=null && query.getQueryPo().getIsRecommend() != null){
+            query.getQueryPo().setOrderBy("like_num");
+        }
+        if(query.getQueryPo()!=null && query.getQueryPo().getIsHot() != null){
+            query.getQueryPo().setOrderBy("read_num");
+        }
         return PageHelper.startPage(query.getPageNum(), query.getPageSize()).doSelectPageInfo(
-                () -> goodsMapper.select(query.getQueryPo()));
+                () -> goodsMapper.loadPage(query.getQueryPo()));
     }
 
     @Override
@@ -62,6 +70,10 @@ public class GoodsServiceImpl implements GoodsService {
         result.setName(contact.getName());
         result.setNumber(contact.getNumber());
         result.setTypeName(TypeEnum.getByCode(goods.getCategory()).getValue());
+        try {
+            goodsMapper.addReadNum(id);
+        }catch (Exception e){
+        }
         return result;
     }
 
@@ -75,6 +87,8 @@ public class GoodsServiceImpl implements GoodsService {
         Goods goods = new Goods();
         BeanUtils.copyProperties(saveDto,goods);
         goods.setContactId(contact.getId());
+        goods.setReadNum(0l);
+        goods.setLikeNum(0l);
         goodsMapper.insertSelective(goods);
 //        String imagePaths = imagesImport(goods.getId(),saveDto.getImages());
         GoodsDetail goodsDetail = new GoodsDetail();

@@ -9,7 +9,7 @@ public interface UserService {
 
     String login(String phone, String password) throws Exception;
 
-    String regist(User user) throws Exception;
+    UserInfoTdo regist(User user) throws Exception;
 
     UserInfoTdo appAuthor(String openid) throws Exception;
 

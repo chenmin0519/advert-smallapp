@@ -69,4 +69,12 @@ public class Goods extends MainPO {
     @ApiModelProperty("联系人id")
     @Column(name = "contact_id")
     private Long contactId;
+
+    @ApiModelProperty("点击数")
+    @Column(name = "read_num")
+    private Long readNum;
+
+    @ApiModelProperty("搜藏数")
+    @Column(name = "like_num")
+    private Long likeNum;
 }

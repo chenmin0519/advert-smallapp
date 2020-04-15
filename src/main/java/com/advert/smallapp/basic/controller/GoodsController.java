@@ -2,6 +2,7 @@ package com.advert.smallapp.basic.controller;
 
 import com.advert.smallapp.commons.ApiResult;
 import com.advert.smallapp.commons.PageQuery;
+import com.advert.smallapp.config.TokenCheck;
 import com.advert.smallapp.pojo.Goods;
 import com.advert.smallapp.service.GoodsService;
 import com.advert.smallapp.tdo.GoodsQuery;
@@ -27,6 +28,7 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
+    @TokenCheck
     @GetMapping(value = "/save")
     @ApiOperation("保存")
     public ApiResult<Boolean> getDefault(@Param("参数") GoodsSaveDto saveDto) throws Exception {
@@ -37,14 +39,7 @@ public class GoodsController {
     @PostMapping(value = "/loadPage")
     @ApiOperation("分页查询")
     public PageInfo<Goods> loadPage(@RequestBody PageQuery<GoodsQuery> query){
-        PageQuery<Goods> pageQuery = new PageQuery<>();
-        Goods goods = new Goods();
-        BeanUtils.copyProperties(query,pageQuery);
-        if(query.getQueryPo() != null) {
-            BeanUtils.copyProperties(query.getQueryPo(), goods);
-        }
-        pageQuery.setQueryPo(goods);
-        return goodsService.loadPage(pageQuery);
+        return goodsService.loadPage(query);
     }
 
     @GetMapping(value = "/loadById")

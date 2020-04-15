@@ -2,6 +2,7 @@ package com.advert.smallapp.service;
 
 import com.advert.smallapp.commons.PageQuery;
 import com.advert.smallapp.pojo.Goods;
+import com.advert.smallapp.tdo.GoodsQuery;
 import com.advert.smallapp.tdo.GoodsSaveDto;
 import com.advert.smallapp.tdo.GoodsVo;
 import com.github.pagehelper.PageInfo;
@@ -18,7 +19,7 @@ public interface GoodsService {
      * @param query
      * @return
      */
-    PageInfo<Goods> loadPage(PageQuery<Goods> query);
+    PageInfo<Goods> loadPage(PageQuery<GoodsQuery> query);
 
     /**
      * 根据id查询信息

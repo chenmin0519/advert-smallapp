@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import com.github.pagehelper.PageInfo;
 import org.springframework.util.StringUtils;
 
 public class ClassUtil {
@@ -111,5 +112,6 @@ public class ClassUtil {
         Class<?> cls = loadClass(className, false);
         classSet.add(cls);
     }
+
 }
 
