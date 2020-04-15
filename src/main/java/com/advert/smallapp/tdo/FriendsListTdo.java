@@ -13,6 +13,7 @@ public class FriendsListTdo {
     private Boolean isLike = false;
     private String images;
     private List<String> zanSource;
+    private List<String> resource;
     private String zanSourceStr;
     private Integer likeNum = 0;
     private List<FriendsCommentTdo> contnets;

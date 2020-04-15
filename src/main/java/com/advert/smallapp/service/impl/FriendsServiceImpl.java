@@ -12,6 +12,7 @@ import com.advert.smallapp.service.FriendsService;
 import com.advert.smallapp.tdo.FriendsCommentTdo;
 import com.advert.smallapp.tdo.FriendsListTdo;
 import com.advert.smallapp.tdo.FriendsQuery;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zaxxer.hikari.util.FastList;
@@ -66,14 +67,24 @@ public class FriendsServiceImpl implements FriendsService {
 
     @Override
     public PageInfo<FriendsListTdo> loadPage(PageQuery<FriendsQuery> query) {
+        Long likeUid = null;
+        if(query.getQueryPo() != null && query.getQueryPo().getLikeUserId() != null){
+            likeUid = query.getQueryPo().getLikeUserId();
+        }
         PageInfo<FriendsListTdo> friends = PageHelper.startPage(query.getPageNum(), query.getPageSize()).doSelectPageInfo(
                 () -> friendsMapper.loadPage(query.getQueryPo()));
         for(FriendsListTdo item : friends.getList()){
-            item.setZanSource(Arrays.asList(item.getZanSourceStr().split(",")));
+            if(item.getImages() != null){
+                item.setResource(JSONObject.parseObject(item.getImages(),ArrayList.class));
+            }
+            if(item.getZanSourceStr() != null) {
+                item.setZanSource(Arrays.asList(item.getZanSourceStr().split(",")));
+            }
             FriendsDetail friendsDetail = new FriendsDetail();
-            if(query.getQueryPo() !=null && query.getQueryPo().getLikeUserId() != null){
+            if(likeUid != null){
                 friendsDetail.setFriendsId(item.getId());
-                friendsDetail.setUserId(query.getQueryPo().getLikeUserId());
+                friendsDetail.setType(FriendsDetailTypeEnum.LIKE.getKey());
+                friendsDetail.setUserId(likeUid);
                 int count = friendsDetailMapper.selectCount(friendsDetail);
                 item.setIsLike(count>0);
             }

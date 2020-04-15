@@ -44,6 +44,7 @@ public interface FriendsMapper extends CommonMapper<Friends>{
     @Select("<script>select a.id,a.name,a.icon,a.content,a.images,count(b.id) as likeNum,group_concat(b.`name`) as zanSourceStr from friends a left join friends_detail b " +
             " on a.id = b.friends_id and b.type=1 where 1=1 " +
             "<if test = 'userId != null'> and user_id = #{userId}</if>" +
+            " group by a.id " +
             "<if test = 'orderBy != null'> order by #{orderBy} </if>" +
             "<if test = 'orderBy == null'> order by id desc</if></script>")
     List<FriendsListTdo> loadPage(FriendsQuery queryPo);

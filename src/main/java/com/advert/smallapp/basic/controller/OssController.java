@@ -54,6 +54,16 @@ public class OssController {
         return ApiResult.success(url);
     }
 
+    @PostMapping(value = "/uploadFriendsImage")
+    @ApiOperation("上传图片")
+    public ApiResult<String> uploadFriendsImage(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        MultipartHttpServletRequest req =(MultipartHttpServletRequest)request;
+        MultipartFile multipartFile = req.getFile("img");
+        String url = ossClient.uploadFile(multipartFile.getInputStream(),"/images/friends",multipartFile.getOriginalFilename());
+        logger.info(url);
+        return ApiResult.success(url);
+    }
+
     @GetMapping(value = "/geUrl")
     @ApiOperation("获取url")
     public ApiResult<String> geUrl(@RequestParam("file") @ApiParam("请求openid必须") String key) throws Exception {
