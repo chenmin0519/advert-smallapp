@@ -45,11 +45,11 @@ server:
     io-threads: 4
     worker-threads: 16
 oss:
-  accessKeyId: LTAI4Ftr4E1G3hT8jn7gqQAS
-  accessKeySecret: VA57Bca4u7IdiuFzdxj4VDB7h5NisR
+  accessKeyId: #缺少配置
+  accessKeySecret: #缺少配置
   bucketName: yizhifile
   accessUrl: http://file.chenmin0519.club/
-  endpoint: oss-cn-hangzhou.aliyuncs.com
+  endpoint: #缺少配置
   picLocation: yizhi
   key: biaoqing #加密密钥
 mybatis:
