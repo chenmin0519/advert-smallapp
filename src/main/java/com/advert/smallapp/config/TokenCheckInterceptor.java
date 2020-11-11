@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import java.util.Base64;
 
 @Component
 public class TokenCheckInterceptor implements HandlerInterceptor {
@@ -41,6 +42,11 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
                 String userJson = SysUtils.decodeToken(json);
                 try {
                     UserTdo userTdo = JSONObject.parseObject(userJson,UserTdo.class);
+                    try {
+                        String key = Base64.getEncoder().encodeToString(userTdo.getPhone().getBytes());
+                        redisClient.setTime(Constans.USER_TOKEN_KEY+key,json,Constans.USER_TOKEN_TIME_OUT);
+                    }catch (Exception e){
+                    }
                 }catch (Exception e){
                     ExceptionUtil.throwException(ExceptionUtil.DECODE_USER_ERROR,"token无效请重新登录");
                 }

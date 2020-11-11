@@ -41,7 +41,7 @@ public interface FriendsMapper extends CommonMapper<Friends>{
     void comment(@Param("id")Long id);
 
 
-    @Select("<script>select a.id,a.name,a.icon,a.content,a.images,count(b.id) as likeNum,group_concat(b.`name`) as zanSourceStr from friends a left join friends_detail b " +
+    @Select("<script>select a.id,a.name,a.add_date,a.icon,a.content,a.images,count(b.id) as likeNum,group_concat(b.`name`) as zanSourceStr from friends a left join friends_detail b " +
             " on a.id = b.friends_id and b.type=1 where 1=1 " +
             "<if test = 'userId != null'> and user_id = #{userId}</if>" +
             " group by a.id " +

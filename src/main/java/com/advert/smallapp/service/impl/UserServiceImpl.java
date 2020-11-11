@@ -128,4 +128,11 @@ public class UserServiceImpl implements UserService {
 //        String json = new String(Base64.getDecoder().decode(ecode));
 //        System.out.println(json);
 //    }
+
+//    public static void main(String[] args) {
+//        String ecode = "Q2hlbm1pbjEyMzQ1Ng==";
+//        System.out.println(ecode);
+//        String json = new String(Base64.getDecoder().decode(ecode));
+//        System.out.println(json);
+//    }
 }

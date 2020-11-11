@@ -50,7 +50,6 @@ public class OSSClientUtils {
         return url.toString();
     }
 
-
     /**
      * @desc 上传本地文件（文件流上传）
      * @author chenmin

@@ -7,6 +7,7 @@ import com.advert.smallapp.enums.UserTypeEnum;
 import com.advert.smallapp.exception.AppException;
 import com.advert.smallapp.exception.ExceptionUtil;
 import com.advert.smallapp.pojo.User;
+import com.advert.smallapp.service.Test;
 import com.advert.smallapp.service.UserService;
 import com.advert.smallapp.tdo.UserInfoTdo;
 import com.advert.smallapp.tdo.WechatOpenidDTO;
@@ -20,12 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Base64;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -110,5 +113,75 @@ public class UserController {
     public ApiResult<User> getUserInfoByToken(@RequestParam("token") @ApiParam("令牌")String token) {
         User user = userService.getUserInfoByToken(token);
         return ApiResult.success(null);
+    }
+
+    @Autowired
+    Test test;
+    @PostMapping(value = "/ceshizhifu")
+    @ApiOperation("测试支付")
+    public ApiResult<Boolean> pay(String str, String ii, HttpServletRequest request) throws Exception {
+        Enumeration<String> pas = request.getParameterNames();
+        while (pas.hasMoreElements()) {
+            System.out.println(pas.nextElement());
+        }
+//        test.pay();
+        return ApiResult.success(true);
+    }
+
+    @PostMapping(value = "/ceshidaifu")
+    @ApiOperation("测试代付")
+    public ApiResult<Boolean> ceshidaifu() throws Exception {
+
+        test.daifu();
+        return ApiResult.success(true);
+    }
+
+    @PostMapping(value = "/chaxun")
+    @ApiOperation("查询")
+    public ApiResult<String> chaxun(@RequestParam String tradeNo) throws Exception {
+        String s = test.chaxun(tradeNo);
+        return ApiResult.success(s);
+    }
+
+    @PostMapping(value = "/sms")
+    @ApiOperation("查询")
+    public ApiResult<String> sms(@RequestParam String mobile) throws Exception {
+        String s = test.sms(mobile);
+        return ApiResult.success(s);
+    }
+
+    @PostMapping(value = "/newPay")
+    @ApiOperation("新支付")
+    public ApiResult<String> newPay() throws Exception {
+        String s = test.newPay();
+        return ApiResult.success(s);
+    }
+
+    @PostMapping(value = "/linkPay")
+    @ApiOperation("新支付")
+    public ApiResult<String> linkPay() throws Exception {
+        String s = test.linkPay();
+        return ApiResult.success(s);
+    }
+
+    @PostMapping(value = "/linkPayOut")
+    @ApiOperation("新代付付")
+    public ApiResult<String> linkPayOut() throws Exception {
+        String s = test.linkPayOut();
+        return ApiResult.success(s);
+    }
+
+    @PostMapping(value = "/aliPay")
+    @ApiOperation("支付宝")
+    public ApiResult<String> aliPay() throws Exception {
+        String s = test.aliPay();
+        return ApiResult.success(s);
+    }
+
+    @PostMapping(value = "/sendMessage")
+    @ApiOperation("支付宝")
+    public ApiResult<String> sendMessage() throws Exception {
+        String s = test.sendMessage();
+        return ApiResult.success(s);
     }
 }

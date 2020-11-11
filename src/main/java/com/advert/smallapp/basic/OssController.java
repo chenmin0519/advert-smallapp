@@ -1,4 +1,4 @@
-package com.advert.smallapp.basic.controller;
+package com.advert.smallapp.basic;
 
 import com.advert.smallapp.commons.ApiResult;
 import com.advert.smallapp.tdo.WechatOpenidDTO;

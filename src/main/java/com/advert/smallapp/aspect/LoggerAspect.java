@@ -15,8 +15,11 @@ public class LoggerAspect {
 
     @Before("execution(* com.advert.smallapp.basic.controller.*.*(..))")
     public void before(JoinPoint joinPoint){
-        Object[] args = joinPoint.getArgs();
-        String methodName = joinPoint.getSignature().getName();
-        logger.info(methodName+"参数----------->:"+ JSONObject.toJSONString(args));
+        try {
+            Object[] args = joinPoint.getArgs();
+            String methodName = joinPoint.getSignature().getName();
+            logger.info(methodName + "参数----------->:" + JSONObject.toJSONString(args));
+        }catch (Exception e){
+        }
     }
 }

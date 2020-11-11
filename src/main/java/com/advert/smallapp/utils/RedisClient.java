@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -54,5 +55,21 @@ public class RedisClient {
     public String get(String key) {
         return redisTemplate.opsForValue().get(key);
     }
-    // 其他方法省略
+
+    /**
+     * 精确删除
+     * @param key
+     */
+    public void del(String key){
+        redisTemplate.delete(key);
+    }
+
+    /**
+     * 模糊删除
+     * @param key
+     */
+    public void delAll(String key){
+        Set<String> keys = redisTemplate.keys(key+"*");
+        redisTemplate.delete(keys);
+    }
 }
