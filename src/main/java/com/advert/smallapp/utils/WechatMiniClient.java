@@ -1,10 +1,8 @@
 package com.advert.smallapp.utils;
 
 import com.advert.smallapp.tdo.WechatOpenidDTO;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Appinfo;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
