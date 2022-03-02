@@ -40,6 +40,7 @@ public class SmallAppApplication {
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
+                .pathMapping("yixiaoshui")
                 .select()
                 .apis(basePackage("com.advert.smallapp.basic.controller"))
                 .paths(PathSelectors.any())

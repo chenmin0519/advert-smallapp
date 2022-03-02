@@ -58,7 +58,7 @@ public class ContextController {
     @PostMapping(value = "/uploadFile",headers = "content-type=multipart/form-data")
     @ApiOperation("上传图片")
     public ApiResult<String> uploadFile(@RequestParam("file") @ApiParam("文件") MultipartFile file) throws Exception {
-        String url = "http://yixiaoshui.top/yixiaoshui/image/";
+        String url = "http://yixiaoshui.top/image/";
         String name = file.getOriginalFilename();
         name = LocalDateTime.now().toString().replace(".","") + name;
         url += name;
