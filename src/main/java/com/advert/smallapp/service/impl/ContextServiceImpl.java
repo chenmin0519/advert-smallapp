@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import springfox.documentation.spring.web.json.Json;
 
 import java.util.*;
 
@@ -45,8 +46,10 @@ public class ContextServiceImpl implements ContextService {
     public Boolean save(Context context) {
         context.setStatus(1);
         int count = contextMapper.insertSelective(context);
-        if(count > 0)
+        if(count > 0) {
+            sendMessage(context);
             return true;
+        }
         return false;
     }
 
@@ -65,5 +68,6 @@ public class ContextServiceImpl implements ContextService {
         param.put("text",text);
         HttpEntity<String> request = new HttpEntity<>(JSONObject.toJSONString(param), headers);
         ResponseEntity<String> response = restTemplate.exchange( robot_url, HttpMethod.GET, request , String.class );
+        log.info("发消息结果：{}",JSONObject.toJSONString(response));
     }
 }
