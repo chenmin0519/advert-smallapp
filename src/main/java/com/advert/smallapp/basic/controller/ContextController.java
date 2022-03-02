@@ -1,11 +1,13 @@
 package com.advert.smallapp.basic.controller;
 
 import com.advert.smallapp.commons.ApiResult;
+import com.advert.smallapp.commons.PageQuery;
 import com.advert.smallapp.pojo.Context;
 import com.advert.smallapp.service.ContextService;
 import com.advert.smallapp.utils.WechatMiniClient;
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -28,11 +30,10 @@ public class ContextController {
     @Autowired
     private ContextService contextService;
 
-    @GetMapping(value = "/page")
-    @ApiOperation("测试")
-    public ApiResult<Boolean> page() throws Exception {
-
-        return ApiResult.success(true);
+    @PostMapping(value = "/page")
+    @ApiOperation("分页查询")
+    public PageInfo<Context> page(@RequestBody PageQuery<Context> query) throws Exception {
+        return contextService.page(query);
     }
 
     @GetMapping(value = "/disabled")
