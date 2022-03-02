@@ -59,15 +59,16 @@ public class ContextServiceImpl implements ContextService {
         String contextStr = "通知：\n发布人：" + context.getNickName() + "\n 班级："+context.getClassName()+" \n 发布内容："+context.getContext();
         contextStr += "\n 发布图片："+context.getImg() +"\n下线链接：http://112.124.34.251/yixiaoshui/context/disabled?id="+context.getId();
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 //        '{"msgtype": "text","text": {"content":"我就是我, 是不一样的烟火"}}'
         Map<String,Object> param = new HashMap<>();
         param.put("msgtype","text");
         Map<String,String> text = new HashMap<>();
         text.put("content",contextStr);
         param.put("text",text);
+        log.info("参数：{}",JSONObject.toJSONString(param));
         HttpEntity<String> request = new HttpEntity<>(JSONObject.toJSONString(param), headers);
-        ResponseEntity<String> response = restTemplate.exchange( robot_url, HttpMethod.GET, request , String.class );
+        ResponseEntity<String> response = restTemplate.exchange( robot_url, HttpMethod.POST, request , String.class );
         log.info("发消息结果：{}",JSONObject.toJSONString(response));
     }
 }
