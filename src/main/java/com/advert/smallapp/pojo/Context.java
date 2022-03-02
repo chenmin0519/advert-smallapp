@@ -36,5 +36,6 @@ public class Context {
     @ApiModelProperty(value = "描述", required = true)
     @Column(name = "context")
     private String context;
-
+    @Column(name = "status")
+    private Integer status;
 }

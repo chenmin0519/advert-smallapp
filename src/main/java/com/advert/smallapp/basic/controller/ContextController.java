@@ -35,6 +35,13 @@ public class ContextController {
         return ApiResult.success(true);
     }
 
+    @GetMapping(value = "/disabled")
+    @ApiOperation("禁用")
+    public ApiResult<Boolean> disabled(@RequestParam("id") Long id) throws Exception {
+        contextService.disabled(id);
+        return ApiResult.success(true);
+    }
+
     @PostMapping(value = "/save")
     @ApiOperation("保存")
     public ApiResult<Boolean> save(@RequestBody Context context) throws Exception {

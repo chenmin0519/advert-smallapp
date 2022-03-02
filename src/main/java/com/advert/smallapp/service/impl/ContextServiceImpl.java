@@ -16,7 +16,16 @@ public class ContextServiceImpl implements ContextService {
 
 
     @Override
+    public void disabled(Long id) {
+        Context context = new Context();
+        context.setId(id);
+        context.setStatus(2);
+        contextMapper.updateByPrimaryKeySelective(context);
+    }
+
+    @Override
     public Boolean save(Context context) {
+        context.setStatus(1);
         int count = contextMapper.insertSelective(context);
         if(count > 0)
             return true;
