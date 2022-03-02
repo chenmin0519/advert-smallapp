@@ -28,9 +28,16 @@ public class ContextController {
     @Autowired
     private ContextService contextService;
 
-    @PostMapping(value = "/save")
+    @GetMapping(value = "/page")
     @ApiOperation("测试")
-    public ApiResult<Boolean> testAddQueue(@RequestBody Context context) throws Exception {
+    public ApiResult<Boolean> page() throws Exception {
+
+        return ApiResult.success(true);
+    }
+
+    @PostMapping(value = "/save")
+    @ApiOperation("保存")
+    public ApiResult<Boolean> save(@RequestBody Context context) throws Exception {
         if(Objects.isNull(context.getImg()) || StringUtils.isEmpty(context.getImg())){
             ApiResult.error("图片不能为空！");
         }
@@ -55,7 +62,7 @@ public class ContextController {
     }
 
 
-    @PostMapping(value = "/uploadFile",headers = "content-type=multipart/form-data")
+    @PostMapping(value = "/uploadFile")
     @ApiOperation("上传图片")
     public ApiResult<String> uploadFile(@RequestParam("file") @ApiParam("文件") MultipartFile file) throws Exception {
         String url = "http://yixiaoshui.top/image/";
