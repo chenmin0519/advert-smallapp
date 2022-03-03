@@ -32,8 +32,8 @@ public class ContextController {
 
     @PostMapping(value = "/page")
     @ApiOperation("分页查询")
-    public PageInfo<Context> page(@RequestBody PageQuery<Context> query) throws Exception {
-        return contextService.page(query);
+    public ApiResult<PageInfo<Context>> page(@RequestBody PageQuery<Context> query) throws Exception {
+        return ApiResult.success(contextService.page(query));
     }
 
     @GetMapping(value = "/disabled")
