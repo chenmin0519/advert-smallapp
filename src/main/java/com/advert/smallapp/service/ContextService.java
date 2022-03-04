@@ -11,4 +11,6 @@ public interface ContextService {
     void disabled(Long id);
 
     PageInfo<Context> page(PageQuery<Context> query);
+
+    void up(Long id);
 }

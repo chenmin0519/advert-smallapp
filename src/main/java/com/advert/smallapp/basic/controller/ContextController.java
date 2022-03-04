@@ -43,6 +43,13 @@ public class ContextController {
         return ApiResult.success(true);
     }
 
+    @GetMapping(value = "/up")
+    @ApiOperation("启用")
+    public ApiResult<Boolean> up(@RequestParam("id") Long id) throws Exception {
+        contextService.up(id);
+        return ApiResult.success(true);
+    }
+
     @PostMapping(value = "/save")
     @ApiOperation("保存")
     public ApiResult<Boolean> save(@RequestBody Context context) throws Exception {
@@ -60,6 +67,9 @@ public class ContextController {
         }
         if(context.getContext().length() > 3000){
             ApiResult.error("文案不得超过3000字符！");
+        }
+        if(!context.getClassName().endsWith("班")){
+            context.setClassName(context.getClassName() + "班");
         }
         try{
             contextService.save(context);

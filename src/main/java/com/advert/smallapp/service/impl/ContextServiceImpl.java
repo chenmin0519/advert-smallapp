@@ -43,6 +43,14 @@ public class ContextServiceImpl implements ContextService {
     }
 
     @Override
+    public void up(Long id) {
+        Context context = new Context();
+        context.setId(id);
+        context.setStatus(1);
+        contextMapper.updateByPrimaryKeySelective(context);
+    }
+
+    @Override
     public Boolean save(Context context) {
         context.setStatus(1);
         int count = contextMapper.insertSelective(context);
@@ -56,8 +64,9 @@ public class ContextServiceImpl implements ContextService {
 
     String robot_url = "https://oapi.dingtalk.com/robot/send?access_token=cc1a022546457d393aa3d5af9bc1bd1998a454978b2e8ebf86bf688b08dc587c";
     private void sendMessage(Context context){
-        String contextStr = "通知：\n发布人：" + context.getNickName() + "\n 班级："+context.getClassName()+" \n 发布内容："+context.getContext();
-        contextStr += "\n 发布图片："+context.getImg() +"\n下线链接：http://112.124.34.251/yixiaoshui/context/disabled?id="+context.getId();
+        String contextStr = "通知：\n发布人：" + context.getNickName() + "\n班级："+context.getClassName()+" \n发布内容："+context.getContext();
+        contextStr += "\n发布的图片链接："+context.getImg() + "\n禁用链接：http://112.124.34.251/yixiaoshui/context/disabled?id="+context.getId();
+        contextStr += "\n启用链接：http://112.124.34.251/yixiaoshui/context/up?id="+context.getId();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 //        '{"msgtype": "text","text": {"content":"我就是我, 是不一样的烟火"}}'
