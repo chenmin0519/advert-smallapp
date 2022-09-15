@@ -65,7 +65,9 @@ public class DahuZhongxueFileUtils {
                         Constants.timeTemp = new Date(zero);//今天零点零分零秒
                     }
                     if(fileDate.after(Constants.timeTemp)){
-                        afterDate = fileDate;
+                        if(fileDate.after(afterDate)){
+                            afterDate = fileDate;
+                        }
                         //今天的文件
                         String detail = validateDetail(docId,formId);
                         if(detail != null) {
