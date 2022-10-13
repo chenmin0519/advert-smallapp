@@ -180,7 +180,6 @@ public class DahuZhongxueFileUtils {
         ResponseEntity<String> loginresponse = restTemplateNoRedirct.exchange( loginEcoqrcodeUrl, HttpMethod.GET, loginrequest , String.class );
         String accessTokenCookie = loginresponse.getHeaders().get("Set-Cookie").get(0);
         Constants.cookie = accessTokenCookie;
-        System.out.println(loginresponse.getBody());
         //        response.get("Set-Cookie").get(0);
 //        String[] split = s.split(";");
 //        String sessionId = "";
