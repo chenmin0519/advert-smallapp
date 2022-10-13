@@ -5,12 +5,18 @@ import com.advert.smallapp.pojo.Context;
 import com.advert.smallapp.tdo.FileVo;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.http.*;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import springfox.documentation.spring.web.json.Json;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.text.ParseException;
@@ -22,6 +28,7 @@ public class DahuZhongxueFileUtils {
 
     final static String FILE_DETAIL_URL = "http://hn.lyedu.com.cn/obpm/runtime/11de-f053-df18d577-aeb6-19a7865cfdb6/forms/__pj3p3kS3UtFeoMkz8EB/documents/__jUiweqTrvRDjcR1C208?newTime=1663247682057&_=0.7457669887220097&appId=11de-f053-df18d577-aeb6-19a7865cfdb6&parentId=&isRelate=undefined&opentarget=detail";
 
+    final static String AOUTH_URL = "http://hn.lyedu.com.cn/api/openapi-uc/oauth/token?client_id=880bc85249a0406fbff8ca0f114f2e51&client_secret=d12acfcbea4f9631&grant_type=password&password=eba6azTGTJlJmAQjEOou3Q==&username=dhzx";
 
     /**
      * 获取文件列表
@@ -46,12 +53,9 @@ public class DahuZhongxueFileUtils {
     }
 
     public static void main(String[] args) throws ParseException {
+        refrushToken();
         Date afterDate = Constants.timeTemp;
         String listInfo = getFileList();
-        if(listInfo == null){
-            //从新授权获取cookie
-
-        }
         if(listInfo != null){
             JSONObject jsonObject = JSONObject.parseObject(listInfo);
             if(jsonObject.get("errmsg").toString().equals("ok")){
@@ -114,6 +118,104 @@ public class DahuZhongxueFileUtils {
         }
         //时间节点后推
         Constants.timeTemp = afterDate;
+    }
+
+    private static void refrushToken() {
+        RestTemplate restTemplate = new RestTemplate();
+        String userName = "dhzx";
+        String password = "eba6azTGTJlJmAQjEOou3Q==";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//        headers.set("Access-Token","c2f68c274dbe603a8f583732aae2229d");
+        headers.set("Branch_Code","E000078");
+        headers.set("Current-Org-Id","E000078200000000375");
+        headers.set("Tenant-Id","E000078");
+        headers.set("X-Client-Id","880bc85249a0406fbff8ca0f114f2e51");
+        headers.set("X-User-Account","E000078200000042568");
+        Map<String,Object> param = new HashMap<>();
+//        param.put("username",userName);
+//        param.put("password",password);
+//        param.put("client_id","880bc85249a0406fbff8ca0f114f2e51");
+//        param.put("client_secret","d12acfcbea4f9631");
+//        param.put("grant_type","password");
+        String url = AOUTH_URL;
+        HttpEntity<String> request = new HttpEntity<>(JSONObject.toJSONString(param), headers);
+        ResponseEntity<String> response = restTemplate.exchange( url, HttpMethod.POST, request , String.class );
+        JSONObject jsonObject = JSONObject.parseObject(response.getBody());
+        String token = jsonObject.getString("access_token");
+        Integer expiresIn = jsonObject.getInteger("expires_in");
+        String accessToken = getToken(token,expiresIn);
+//        String cookie = response.getHeaders().get("Set-Cookie").get(0).split(";")[0] + "; authorized=true; accessToken=" + accessToken;
+//        Constants.cookie = cookie;
+
+        String getAccreditCodeUrl = "http://hn.lyedu.com.cn/api/openapi-uc/accreditcode/getAccreditCode";
+        headers.add("Cookie","authorized=true");
+        headers.set("Access-Token",token);
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        param.put("accessToken",token);
+        param.put("userId","E000078200000042568");
+        HttpEntity<String> accreditCodeRequest = new HttpEntity<>(JSONObject.toJSONString(param), headers);
+        ResponseEntity<String> accreditCodeResponese = restTemplate.exchange( getAccreditCodeUrl, HttpMethod.POST, accreditCodeRequest , String.class );
+        JSONObject accreditCodeJson = JSONObject.parseObject(accreditCodeResponese.getBody());
+        String accreditCode = accreditCodeJson.getJSONObject("responseEntity").getString("accreditCode");
+
+        String loginEcoqrcodeUrl = "http://hn.lyedu.com.cn/signon/runtime/login/ecoqrcodelogin/user/ssi?token="
+                + token
+                + "&=access_token="
+                + token
+                + "&accredit_code="
+                + accreditCode;
+
+        HttpHeaders loginheaders = new HttpHeaders();
+        loginheaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        loginheaders.add("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+        loginheaders.add("Accept-Encoding","gzip,deflate");
+        loginheaders.add("Accept-language","zh-CN.zh;q=0.9");
+        loginheaders.add("Cookie","authorized=true");
+        loginheaders.add("Host","http://hn.lyedu.com.cn");
+        loginheaders.add("Upgrade-Insecure-Requests","1");
+        loginheaders.add("Connection","keep-alive");
+        HttpEntity<String> loginrequest = new HttpEntity<>(null, headers);
+        RestTemplate restTemplateNoRedirct = new RestTemplate(new NoRedirectSimpleClientHttpRequestFactory());
+        ResponseEntity<String> loginresponse = restTemplateNoRedirct.exchange( loginEcoqrcodeUrl, HttpMethod.GET, loginrequest , String.class );
+        String accessTokenCookie = loginresponse.getHeaders().get("Set-Cookie").get(0);
+        Constants.cookie = accessTokenCookie;
+        System.out.println(loginresponse.getBody());
+        //        response.get("Set-Cookie").get(0);
+//        String[] split = s.split(";");
+//        String sessionId = "";
+
+
+    }
+    public static class NoRedirectSimpleClientHttpRequestFactory extends SimpleClientHttpRequestFactory {
+
+        @Override
+        protected void prepareConnection(HttpURLConnection connection, String httpMethod) throws IOException {
+            super.prepareConnection(connection, httpMethod);
+            connection.setInstanceFollowRedirects(false);
+        }
+    }
+
+    private static String getToken(String token, Integer expiresIn){
+        Date signDate = new Date();
+        Algorithm algorithm = Algorithm.HMAC256(token);//进行加密算法
+        Map<String,Object> headerMap = new HashMap<>();
+        headerMap.put( "typ","JWT");
+        headerMap.put( "alg","HS256");
+        return JWT.create()
+                //(token的Header信息)
+                .withHeader(headerMap)
+                //设置当前签发时间(token的Payload信息)
+//                .withIssuedAt(signDate)
+                //设置token过期时间(token的Payload信息)
+                .withExpiresAt(signDate)
+                //自定义存放用户id在tokne中(token的自定义Payload信息)
+                .withClaim("iss", "auth0")
+                //自定义存放用户名在token中(token的自定义Payload信息)
+                .withClaim("username","__8TRPf3sknaOyxQCOSeK")
+//                .withClaim("exp",date.getTime()/1000)
+                //(token的Signature信息)
+                .sign(algorithm);
     }
 
     private static String validateDetail(String docId, String formId) {

@@ -80,4 +80,43 @@ public class ContextServiceImpl implements ContextService {
         ResponseEntity<String> response = restTemplate.exchange( robot_url, HttpMethod.POST, request , String.class );
         log.info("发消息结果：{}",JSONObject.toJSONString(response));
     }
+
+    public static void main(String[] args) {
+//        String str = "http://smsapi.5taogame.com/sms/httpSmsInterface2";
+//        Map<String,Object> param = new HashMap<>();
+//        param.put("userId","csjixing");
+//        param.put("account","csjixing");
+//        param.put("password","csjixing");
+//        param.put("mobile","18874830336");
+//        param.put("content","【趣提资讯】您的验证为1234， 5分钟内有效。");
+//        param.put("action","sendhy");
+////        param.put("checkcontent","1");
+//        RestTemplate restTemplate = new RestTemplate();
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+//        System.out.println("参数："+JSONObject.toJSONString(param));
+//        HttpEntity<String> request = new HttpEntity<>(JSONObject.toJSONString(param), headers);
+//        ResponseEntity<String> response = restTemplate.exchange( str, HttpMethod.POST, request , String.class );
+//        System.out.println(JSONObject.toJSONString(response.getBody()));
+//        https://rxlwpheczl961184.su.bcebos.com/qxyfrrwakmtemp.html?s=MVvls
+        String str = "https://blswgahupe357841-1313036676.cos.ap-nanjing.myqcloud.com/xrbjlmfqlo95570d30-0c8a-469a-8a05-55dc511f540e.html";
+//        Map<String,Object> param = new HashMap<>();
+//        param.put("userId","csjixing");
+//        param.put("account","csjixing");
+//        param.put("password","csjixing");
+//        param.put("mobile","18874830336");
+//        param.put("content","【趣提资讯】您的验证为1234， 5分钟内有效。");
+//        param.put("action","sendhy");
+//        param.put("checkcontent","1");
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+//        System.out.println("参数："+JSONObject.toJSONString(param));
+        HttpEntity<String> request = new HttpEntity<>("", headers);
+        ResponseEntity<String> response = restTemplate.exchange( str, HttpMethod.GET, request , String.class );
+        if(response.getBody().contains("https://o.jixinwangluo.cn/static/js/core.min.js")){
+            System.out.println(true);
+        }
+        System.out.println(JSONObject.toJSONString(response.getBody()));
+    }
 }
