@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class FileCheckTask {
 
 //    @Scheduled(cron = "0/5 * * * * ?")
-    @Scheduled(cron = "0 0 10,16 * * ?")
+    @Scheduled(cron = "0 30 10,17 * * ?")
     private void configureTasks() throws ParseException {
         log.info("开始检查达浒中学新文件");
         DahuZhongxueFileUtils.checkDhzxFile();
